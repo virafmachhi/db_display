@@ -1,0 +1,172 @@
+<html> 
+<body> 
+	<form id="studentForm" method = "POST"> 
+		<p><h3>Enter Information</h3></p> 
+		<p>First Name Last Name <input type = 'First Name Last Name' name = 'name'/></p> 
+		<p>Drivers License <input type = 'Drivers License' name = 'license'/></p> 
+		<p>SSN <input type = 'SSN' name = 'ssn'/></p> 
+		<p><input type = 'submit' value = 'Submit'/></p> 
+	</form>
+    
+    <div id="result"></div>
+    <script>
+        document.getElementById('studentForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            fetch('/result', {
+                method: 'POST',
+                body: new FormData(this),
+            })
+            .then(response => response.json())
+            .then(data => {
+                const resultElement = document.getElementById('result');
+                resultElement.innerHTML = JSON.stringify(data, null, 2);
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+
+
+<!-- Styling for the information within the Country Select Boxes to be Searchable and Multiple-->
+<head>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+</head>
+
+<!-- Create the labels for all USA States -->
+<label class="form-label select-label">USA</label>
+<select class="select" multiple>
+    {% for territory in us_states %}
+        <option value="{{ territory }}">{{ territory.text }}</option>
+    {% endfor %}
+</select>
+<script>
+    $(document).ready(function() {
+        $('.select').select2();
+    });
+</script>
+
+
+<!-- Create the labels for all Canada Territories -->
+<form id="canadaForm" method = "POST" action="/process_selection">
+<label class="form-label select-label">Canada</label>
+<select class="select" multiple name="selected_territories">
+    {% for territory in canada %}
+        <option value="{{ territory }}">{{ territory.text }}</option>
+    {% endfor %}
+</select>
+<button type="submit">Submit</button>
+</form>
+
+
+<div id="process_selection"></div>
+
+<!--
+<script>
+$(document).ready(function() {
+    $('.select').select2();
+});
+
+document.getElementById('canadaForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    fetch('/process_selection', {
+        method: 'POST',
+        body: new FormData(this),
+    })
+    .then(response => response.json())
+    .then(data => {
+        const resultElement = document.getElementById('process_selection');
+        resultElement.innerHTML = "Selected territories: " + data['Selected territories'].join(', ');
+    })
+    .catch(error => console.error('Error:', error));
+});
+</script>
+-->
+
+
+
+<head>
+    <title>JSON to HTML Table</title>
+</head>
+<body>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Country</th>
+                <th>Date of Birth</th>
+                <th>Email</th>
+                <th>Gender</th>
+                <th>Original City</th>
+                <th>Original State</th>
+                <!-- Add more headers for other fields as needed -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in table_object %}
+            <tr>
+                <td>{{ item.Country }}</td>
+                <td>{{ item.DateOfBirth }}</td>
+                <td>{{ item.Email }}</td>
+                <td>{{ item.Gender }}</td>
+                <td>{{ item["Original City"] }}</td>
+                <td>{{ item["Original State"] }}</td>
+                <!-- Add more cells for other fields as needed -->
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+
+
+
+
+<head>
+    <style>
+        .multiselect {
+            display: inline-block;
+            border: 1px solid #ccc;
+            padding: 5px;
+        }
+
+        .options-toggle {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .options {
+            display: none;
+            border: 1px solid #ccc;
+            max-height: 400px;
+            overflow-y: auto;
+            column-count: 5; /* Two columns */
+        }
+
+        .option-label {
+            display: block;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="multiselect">
+        <div class="options-toggle" onclick="toggleOptions()">United States</div>
+        <div class="options" id="options">
+            {% for state in us_states %}
+                <label class="option-label">
+                    <input type="checkbox" value="{{ state.text }}"> {{ state.text }}
+                </label>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script>
+        function toggleOptions() {
+            const options = document.getElementById('options');
+            options.style.display = options.style.display === 'block' ? 'none' : 'block';
+        }
+    </script>
+</body>
+
+</html> 
+

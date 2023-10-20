@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Selected Territories</title>
+</head>
+<body>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Country</th>
+                <th>Date of Birth</th>
+                <th>Email</th>
+                <th>Gender</th>
+                <th>Original City</th>
+                <th>Original State</th>
+                <!-- Add more headers for other fields as needed -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in table_object %}
+            <tr>
+                <td>{{ item.Country }}</td>
+                <td>{{ item.DateOfBirth }}</td>
+                <td>{{ item.Email }}</td>
+                <td>{{ item.Gender }}</td>
+                <td>{{ item["Original City"] }}</td>
+                <td>{{ item["Original State"] }}</td>
+                <!-- Add more cells for other fields as needed -->
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
