@@ -16,17 +16,17 @@ def table(locations_list):
     burp0_headers = {"Authorization": "bearer SPVO5jlbcJODBc8s2jVB7wytC2wfkEWg~NrQqGmpYVNYEi5HGUu45OzSBgcTOrXBkO5AhYysQrqaR", "Content-Type": "application/json"}
     #burp0_json={"end": "now", "queryString":f"Country=CA | in(\"Original State\",values=[MB])" ,"start": 0}
     burp0_json={"end": "now", "queryString":"Country=CA | in(\"Original State\",values=[" + output_string +  "])" ,"start": 0}
-    burp1_json={"end": "now", "queryString":"Country=CA | in(\"Original State\",values=[" + 'BC, NB' + "])" ,"start": 0}
 
     result = requests.post(burp0_url, headers=burp0_headers, json=burp0_json)
-    print(burp0_json)
-    print(result)
+
     resp = result.content
     json_data = resp.decode('utf-8')
     table_object = []
     for value in json_data.split('\n'):
         if value != "":
             table_object.append(json.loads(value))
+
+    print(table_object)
 
     return table_object
 
@@ -39,31 +39,7 @@ def territories(file_name):
 
 @app.route('/') 
 def index(): 
-    return render_template('index.html', canada=territories('locations/Canada'), us_states=territories('locations/US')) #, table_object=process_selection()) 
-
-'''
-@app.route('/table', methods=['POST', 'GET'])
-def table():
-    burp0_url = "https://mgmresorts.logscale.us-2.crowdstrike.com:443/api/v1/repositories/2023edw/query/"
-    burp0_headers = {"Authorization": "bearer SPVO5jlbcJODBc8s2jVB7wytC2wfkEWg~NrQqGmpYVNYEi5HGUu45OzSBgcTOrXBkO5AhYysQrqaR", "Content-Type": "application/json"}
-    
-    process_selection_result = process_selection()  # Get the list of selected states
-    print(process_selection()) 
-    formatted_states = ['| "Original State"= "{}"'.format(state) for state in process_selection_result]
-    original_state = ''.join(formatted_states)    
-    print(original_state) 
-    burp0_json={"end": "now", "queryString":f"Country=CA | {original_state}","start": 0}
-    
-    result = requests.post(burp0_url, headers=burp0_headers, json=burp0_json)
-    resp = result.content
-    json_data = resp.decode('utf-8')
-    table_object = []
-    for value in json_data.split('\n'):
-        if value != "":
-            table_object.append(json.loads(value))
-
-    return render_template('table.html', data=table_object)
-'''
+    return render_template('index.html', canada=territories('locations/Canada'), us_states=territories('locations/US'))
 
 
 @app.route('/process_selection', methods=['POST'])
@@ -77,8 +53,13 @@ def process_selection():
 
     table_object = table(json_objects)
     return render_template('table.html', table_object=table_object)
-    #return table_object
 
+
+@app.route('/my-link/')
+def my_link():
+  print ('I got clicked!')
+
+  return 'Click.'
 
 @app.route('/result', methods = ['POST'])
 def result():

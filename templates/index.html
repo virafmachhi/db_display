@@ -50,7 +50,7 @@
 <!-- Create the labels for all Canada Territories -->
 <form id="canadaForm" method = "POST" action="/process_selection">
 <label class="form-label select-label">Canada</label>
-<select class="select" multiple name="selected_territories" style="font-size: 16px; width: px;">
+<select class="select" multiple name="selected_territories" style="font-size: 16px; width: 65px;">
     {% for territory in canada %}
         <option value="{{ territory }}">{{ territory.text }}</option>
     {% endfor %}
@@ -82,12 +82,6 @@ document.getElementById('canadaForm').addEventListener('submit', function (e) {
 });
 </script>
 -->
-
-
-
-
-
-
 
 <head>
     <style>
@@ -136,6 +130,12 @@ document.getElementById('canadaForm').addEventListener('submit', function (e) {
         }
     </script>
 </body>
+
+
+<div>
+    <button> <a href="/my-link/">Click me</a></button>
+</div>
+
 
 </html> 
 
