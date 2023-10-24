@@ -1,6 +1,10 @@
 from flask import Flask, render_template, request, make_response, jsonify, redirect, url_for
 import requests
 import json
+from collections import Counter
+
+
+
 
 app = Flask(__name__, template_folder = 'templates') 
 
@@ -22,11 +26,15 @@ def table(locations_list):
     resp = result.content
     json_data = resp.decode('utf-8')
     table_object = []
+    table_counts = {"email":0}
     for value in json_data.split('\n'):
         if value != "":
-            table_object.append(json.loads(value))
+            json_value = json.loads(value)
+            table_object.append(json_value)
+            if json_value["Email"] != "":
+                table_counts["email"] += 1
 
-    print(table_object)
+    print(table_counts)
 
     return table_object
 
@@ -55,24 +63,26 @@ def process_selection():
     return render_template('table.html', table_object=table_object)
 
 
-@app.route('/my-link/')
+@app.route('/click', methods=['GET'])
 def my_link():
   print ('I got clicked!')
-
   return 'Click.'
 
 @app.route('/result', methods = ['POST'])
 def result():
     if request.method == 'POST':
-        name = request.form['name']
-        lisc = request.form['license']
-        ssn = request.form['ssn']
+        firstName = request.form['firstName']
+        lastName = request.form['lastName']
+        phoneNumber = request.form['phoneNumber']
+        email = request.form['email']
+        birth = request.form['birth']   
+
 
     burp0_url = "https://mgmresorts.logscale.us-2.crowdstrike.com:443/api/v1/repositories/2023edw/query/"
     burp0_headers = {"Authorization": "bearer SPVO5jlbcJODBc8s2jVB7wytC2wfkEWg~NrQqGmpYVNYEi5HGUu45OzSBgcTOrXBkO5AhYysQrqaR", "Content-Type": "application/json"}
-    burp0_json={"end": "now", "queryString":f"driver_license ={lisc}" ,"start": 0}
-    #burp0_json={"end": "now", "queryString":"Country=CA | \"Original State\"=BC","start": 0}
-    
+    #burp0_json={"end": "now", "queryString":f"last_name={lastName}" ,"start": 0}
+    burp0_json = {"end": "now", "queryString":f"driver_license=Y8364037" ,"start": 0}
+
     result = requests.post(burp0_url, headers=burp0_headers, json=burp0_json)
 
     resp = result.content

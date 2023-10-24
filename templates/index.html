@@ -2,9 +2,11 @@
 <body> 
 	<form id="studentForm" method = "POST"> 
 		<p><h3>Enter Information</h3></p> 
-		<p>First Name Last Name <input type = 'First Name Last Name' name = 'name'/></p> 
-		<p>Drivers License <input type = 'Drivers License' name = 'license'/></p> 
-		<p>SSN <input type = 'SSN' name = 'ssn'/></p> 
+		<p>First Name<input type = 'First Name' name = 'firstName'/></p> 
+		<p>Last Name<input type = 'Last Name' name = 'lastName'/></p> 
+        <p>Phone Number<input type = 'Phone Number' name = 'phoneNumber'/></p>
+        <p>Email<input type = 'Email' name = 'email'/></p> 
+        <p>Date of Birth<input type = 'Date of Birth' name = 'birth'/></p>   
 		<p><input type = 'submit' value = 'Submit'/></p> 
 	</form>
     
@@ -59,7 +61,8 @@
 </form>
 
 
-<div id="process_selection"></div>
+
+
 
 <!--
 <script>
@@ -132,9 +135,27 @@ document.getElementById('canadaForm').addEventListener('submit', function (e) {
 </body>
 
 
-<div>
-    <button> <a href="/my-link/">Click me</a></button>
-</div>
+
+    <form id="click_link" method = "POST">
+    <button type="submit"> Click me</a></button>
+    <div id="click"></div>
+<script>
+    document.getElementById('click_link').addEventListener('submit', function (e) {
+        e.preventDefault();
+        fetch('/click', {
+            method: 'GET',
+        })
+        .then(response => response.text())
+        .then(data => {
+            const resultElement = document.getElementById('click');
+            resultElement.innerHTML = data;
+        })
+        .catch(error => console.error('Error: ', error));
+    });
+</script>
+
+
+
 
 
 </html> 
