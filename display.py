@@ -61,7 +61,13 @@ def process_selection():
 
     table_object = table(json_objects)
     return render_template('table.html', table_object=table_object)
+    
 
+@app.route('/new-link/')
+def new_link():
+  print('I got clicked!')
+
+  return 'Click.'
 
 @app.route('/click', methods=['GET'])
 def my_link():
@@ -80,8 +86,8 @@ def result():
 
     burp0_url = "https://mgmresorts.logscale.us-2.crowdstrike.com:443/api/v1/repositories/2023edw/query/"
     burp0_headers = {"Authorization": "bearer SPVO5jlbcJODBc8s2jVB7wytC2wfkEWg~NrQqGmpYVNYEi5HGUu45OzSBgcTOrXBkO5AhYysQrqaR", "Content-Type": "application/json"}
-    #burp0_json={"end": "now", "queryString":f"last_name={lastName}" ,"start": 0}
-    burp0_json = {"end": "now", "queryString":f"driver_license=Y8364037" ,"start": 0}
+    burp0_json={"end": "now", "queryString":f"Email=ellekay3@yahoo.com" ,"start": 0}
+    #burp0_json = {"end": "now", "queryString":f"driver_license=Y8364037" ,"start": 0}
 
     result = requests.post(burp0_url, headers=burp0_headers, json=burp0_json)
 

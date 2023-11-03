@@ -49,7 +49,7 @@
 </script>
 
 
-<!-- Create the labels for all Canada Territories -->
+<!-- Create the labels for all Canada Territories 
 <form id="canadaForm" method = "POST" action="/process_selection">
 <label class="form-label select-label">Canada</label>
 <select class="select" multiple name="selected_territories" style="font-size: 16px; width: 65px;">
@@ -59,10 +59,49 @@
 </select>
 <button type="submit">Submit</button>
 </form>
+-->
 
 
+<body>
+    <form id="canadaForm" method="POST" action="/process_selection">
+        <label class="form-label select-label">Canada</label>
+        <select class="select" multiple name="selected_territories" style="font-size: 16px; width: 65px;">
+            {% for territory in canada %}
+                <option value="{{ territory }}">{{ territory.text }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit">Submit</button>
+    </form>
 
+    <!-- Add an iframe with an initial source -->
+    <iframe id="tableFrame" src="about:blank" width="50%" height="400"></iframe>
 
+    <!-- JavaScript to update the iframe source -->
+    <script>
+        document.getElementById("canadaForm").addEventListener("submit", function (event) {
+            event.preventDefault(); // Prevent the form from submitting in the traditional way
+            var formData = new FormData(this);
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "/process_selection", true);
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    document.getElementById("tableFrame").srcdoc = xhr.responseText;
+                }
+            };
+            xhr.send(formData);
+        });
+    </script>
+
+<form id="saveFile" method = "POST"> 
+    <p><h3>Download Information</h3></p> 
+    <p>Filename <input type = 'filename' name = 'fileName'/></p> 
+    <p><input type = 'submit' value = 'Submit'/></p> 
+</form>
+</body>
+
+<div>
+<a href="/new-link">Click me</a>
+</div>
 
 <!--
 <script>
@@ -153,7 +192,6 @@ document.getElementById('canadaForm').addEventListener('submit', function (e) {
         .catch(error => console.error('Error: ', error));
     });
 </script>
-
 
 
 
