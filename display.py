@@ -8,6 +8,7 @@ from collections import Counter
 
 app = Flask(__name__, template_folder = 'templates') 
 
+csv_data = None
 
 def table(locations_list):
 
@@ -35,8 +36,27 @@ def table(locations_list):
                 table_counts["email"] += 1
 
     print(table_counts)
+    csv_data = table_object
 
     return table_object
+
+#still working on the csv save portion
+def save_csv(csv_data):
+    # Define the CSV file name
+    csv_file = "data.csv"
+
+    # Extract the field names (keys of the dictionary)
+    field_names = csv_data[0].keys()
+
+    # Write the data to the CSV file
+    with open(csv_file, mode='w', newline='') as file:
+        writer = csv.DictWriter(file, fieldnames=field_names)
+
+        # Write the header (field names)
+        writer.writeheader()
+
+        # Write the data
+        writer.writerows(data)
 
 
 def territories(file_name):
@@ -49,7 +69,6 @@ def territories(file_name):
 def index(): 
     return render_template('index.html', canada=territories('locations/Canada'), us_states=territories('locations/US'))
 
-
 @app.route('/process_selection', methods=['POST'])
 def process_selection():
     selected_territories = request.form.getlist('selected_territories')  # Get the list of selected territories
@@ -60,8 +79,8 @@ def process_selection():
         json_objects.append(item_dict['text'])
 
     table_object = table(json_objects)
+    table_Object = table_object
     return render_template('table.html', table_object=table_object)
-    
 
 @app.route('/new-link/')
 def new_link():
